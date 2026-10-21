@@ -1,0 +1,100 @@
+/* Shared design system. Every component builds on these tokens; do not redefine them per file. */
+@import url('https://fonts.googleapis.com/css2?family=Caveat+Brush&family=DynaPuff:wght@400..700&family=Great+Vibes&family=Quicksand:wght@400..700&family=Sacramento&family=Shantell+Sans:wght@300..800&display=swap');
+
+:root {
+  /* wizard (pink) palette */
+  --canvas: #FFF6F8; --canvas-2: #FDE9EF;
+  --card: #FFFFFF; --card-2: #FFF9FB;
+  --ink: #3B1524; --ink-soft: #8A5C6B; --ink-dim: #C09AA6;
+  --line: #F6D9E2; --line-2: #FBEAF0;
+  --sun: #F0A93B; --sun-deep: #D2860E; --sun-wash: #FFF2DA;
+  --coral: #FF5F86; --coral-deep: #E23B67;
+  --plum: #B23A76; --plum-deep: #8A2458;
+  --berry: #E14B8A; --blush: #FFA9C4;
+  --cta: linear-gradient(135deg, #FF7FA3 0%, #EF4C7C 52%, #D42A5F 100%);
+  --cta-plum: linear-gradient(135deg, #C7508B 0%, #8A2458 100%);
+  --ring: 0 0 0 4px rgba(178, 58, 118, .24);
+  --sh-1: 0 2px 8px rgba(59, 21, 36, .07);
+  --sh-2: 0 16px 38px rgba(59, 21, 36, .14);
+  --sh-3: 0 26px 60px rgba(59, 21, 36, .20);
+
+  /* experience (cream paper) palette — overridden per vibe by applyTheme() via --om-* */
+  --paper: #F8EFD6; --paper-2: #F5E4BF; --paper-ink: #4A1F2E; --paper-ink-soft: #8E6070;
+  --wine: #7A1717; --rose: #D8456B;
+  --cream-glow: radial-gradient(circle at 50% 45%, #FBF4E2 0%, #F8ECCB 55%, #F4E1BA 100%);
+  --door-night: #2A0F1F; --door-ink: #FFEFE6; --brass: #D9A441;
+
+  /* type */
+  --font-disp: "DynaPuff", "Baloo 2", "Quicksand", system-ui, sans-serif;   /* headings, buttons */
+  --font-hand: "Shantell Sans", "Comic Sans MS", cursive;                    /* body, labels */
+  --font-script: "Great Vibes", "Dancing Script", Georgia, cursive;          /* "From me to you." */
+  --font-soft: "Sacramento", "Great Vibes", Georgia, cursive;                 /* soft signatures */
+  --font-brush: "Caveat Brush", "Caveat", cursive;                           /* underlined accent words */
+  --font-ui: "Quicksand", "Nunito", system-ui, sans-serif;                   /* inputs, small UI */
+
+  --r-lg: 34px; --r: 22px; --r-sm: 14px; --pill: 999px;
+  --gutter: clamp(16px, 4vw, 28px);
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+  --vh: 1dvh;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+html, body { margin: 0; padding: 0; min-height: 100%; }
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-hand);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;          /* never sideways scroll */
+  overflow-y: auto;            /* page itself scrolls; no fixed-height traps */
+  overscroll-behavior-y: none;
+}
+#root { min-height: 100dvh; }
+img, svg, canvas, video { max-width: 100%; display: block; }
+button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+input, textarea, select { font: inherit; color: inherit; }
+:focus-visible { outline: none; box-shadow: var(--ring); }
+
+/* Accent word: brush font, gold, with a soft pink highlighter bar under it (as in "GIFT", "out loud", "ready") */
+.om-accent {
+  font-family: var(--font-brush); color: var(--sun-deep); font-weight: 400;
+  background: linear-gradient(transparent 68%, rgba(255, 169, 196, .55) 68%, rgba(255, 169, 196, .55) 92%, transparent 92%);
+  padding: 0 .08em; letter-spacing: .01em;
+}
+
+/* Full-screen scroll container for the recipient experience (public AND preview).
+   Height uses dvh so mobile browser bars never hide content; it scrolls vertically when a scene is taller than the screen. */
+.om-screen {
+  position: fixed; inset: 0; z-index: 40;
+  height: 100dvh; width: 100%;
+  overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+.om-scene {
+  min-height: 100dvh; width: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: calc(env(safe-area-inset-top) + 76px) var(--gutter) calc(env(safe-area-inset-bottom) + 40px);
+  text-align: center; position: relative;
+}
+
+/* Floating chrome used in the experience: "← Back" pill, PREVIEW badge, sound toggle */
+.om-chrome-back, .om-chrome-sound {
+  position: fixed; top: calc(env(safe-area-inset-top) + 12px); z-index: 60;
+  border: 0; background: #fff; box-shadow: var(--sh-2);
+}
+.om-chrome-back { left: 12px; border-radius: var(--pill); padding: 10px 18px; font-family: var(--font-disp); font-weight: 600; color: var(--ink); }
+.om-chrome-sound { right: 12px; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-size: 18px; }
+.om-chrome-badge {
+  position: fixed; top: calc(env(safe-area-inset-top) + 12px); left: 50%; transform: translateX(-50%); z-index: 60;
+  background: #2E1220; color: #fff; font-family: var(--font-disp); font-weight: 700; font-size: 11px; letter-spacing: .22em;
+  padding: 8px 16px; border-radius: var(--pill); pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+/* Scenes and transition layers may scale/blur past the edges while animating; clip sideways only so vertical scrolling still works. */
+.om-scene, .om-xp-layer { overflow-x: clip; }
