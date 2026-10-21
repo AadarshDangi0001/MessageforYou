@@ -45,9 +45,13 @@ You need **Node.js** and **MongoDB** installed.
 
 ## Putting it online for free
 
-The simplest free setup is **MongoDB Atlas** for storing gifts and **Render** for hosting the app. The app is not fully ready for that yet. Photos and voice messages are saved on the server's disk, and free hosts wipe that disk when they restart. Before going live they need to be stored somewhere permanent, for example in the database.
+A free setup that works: **MongoDB Atlas** (database), **Render** (the server in `server/`) and **Vercel** (the website in `client/`).
 
-Also, free hosts put the site to sleep when nobody visits, so the first visit after a quiet spell can take about a minute to load.
+- Photos and voice messages are saved inside MongoDB, so they are not lost when the free server restarts.
+- `client/vercel.json` sends the website's `/api` and `/uploads` requests to the Render server. If your Render address changes, update it in that file.
+- On Render, set `MONGODB_URI` (your Atlas link) and `PUBLIC_URL` (your Vercel address, so share links point to the website).
+- Free servers go to sleep when nobody visits, so the first visit after a quiet spell can take up to a minute.
+- Atlas's free plan has 512 MB. Photos are shrunk before upload (about 20 to 100 KB each), so that is plenty for thousands of gifts, but voice messages are larger.
 
 ## Your own music
 

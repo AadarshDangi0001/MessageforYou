@@ -3,13 +3,13 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import giftsRouter from './routes/gifts.js';
-import uploadsRouter, { UPLOAD_ROOT } from './routes/uploads.js';
+import uploadsRouter, { serveUpload } from './routes/uploads.js';
 
 const app = express();
 app.set('trust proxy', 1);
 app.use(cors());
 app.use(express.json({ limit: '2mb' }));
-app.use('/uploads', express.static(UPLOAD_ROOT, { maxAge: '7d', index: false }));
+app.get('/uploads/:kind/:name', (req, res, next) => mongoose.connection.readyState === 1 ? serveUpload(req, res, next) : res.status(503).end());
 
 app.get('/api/health', (_req, res) => res.json({ ok: true, db: mongoose.connection.readyState === 1 }));
 app.use('/api/uploads', uploadsRouter);
